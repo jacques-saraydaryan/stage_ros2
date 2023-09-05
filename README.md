@@ -24,15 +24,20 @@ $ colcon build
 ### Robot Stage
 ```
 ros2 run stage_ros stageros src/stage_ros2/world/wonik_4th.world
+ros2 run stage_ros stageros src/ros_general_planner_tuto/woawo/stage_ros2/world/maze.world
 ```
 
+- start the map_server node
+```
+ros2 run nav2_util lifecycle_bringup map_server
+```
 
 ### Robot Navigation
 Launch 
 
 ```
 # Navigation
-ros2 launch stage_ros robot_launch nav:=true
+ros2 launch stage_ros robot_launch.py nav:=true
 ```
 2D Pose Estimate, 2D Goal Pose
 
