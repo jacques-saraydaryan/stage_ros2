@@ -1,7 +1,7 @@
 # Stage for Ros2
  
 ## Environment
-**Ubuntu 20.04 ROS2 Galactic**
+**Ubuntu 20.04 ROS2 Galactic/Humble**
 
 ## Reference
 https://github.com/n0nzzz/stage_ros2
@@ -11,7 +11,10 @@ https://github.com/n0nzzz/stage_ros2
 $ mkdir -p stage_ros2_ws/src
 $ cd stage_ros2_ws/src
 $ git clone https://github.com/woawo1213/stage_ros2.git
-$ sudo apt-get install ros-noetic-stage # for FLTK
+#$ sudo apt-get install ros-noetic-stage # for FLTK
+$ sudo apt install ros-humble-laser-filters
+$ sudo apt install ros-humble-joint-state-publisher
+$ sudo apt install ros-humble-xacro
 $ cd ..
 $ colcon build
 ```
@@ -25,18 +28,18 @@ ros2 run stage_ros stageros src/stage_ros2/world/wonik_4th.world
 
 
 ### Robot Navigation
-Launch 파일 실행 시 다음 옵션 사용
+Launch 
 
 ```
 # Navigation
 ros2 launch stage_ros robot_launch nav:=true
 ```
-2D Pose Estimate로 위치초기화, 2D Goal Pose로 목적지 설정
+2D Pose Estimate, 2D Goal Pose
 
 <img src="doc/nav.png" width="1000" height="500">
 
 ### Robot SLAM
-Launch 파일 실행 시 다음 옵션 사용
+Launch 
 ```
 # Terminal 1
 ros2 launch stage_ros robot_launch slam:=true
