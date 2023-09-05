@@ -10,6 +10,7 @@ from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import (DeclareLaunchArgument, IncludeLaunchDescription)
 from ament_index_python.packages import get_package_share_directory
+import launch_ros.actions
 
 
 def generate_launch_description():
@@ -18,11 +19,14 @@ def generate_launch_description():
     default_rviz_config_path = os.path.join(
         pkg_share, 'rviz/robot.rviz')
     # default_bt_config_path = os.path.join(pkg_share, 'bt/nav2_dist.xml')
-    default_map_path = os.path.join(pkg_share, 'map/wonik_4th.yaml')
+    #default_map_path = os.path.join(pkg_share, 'map/wonik_4th.yaml')
+    default_map_path = os.path.join(pkg_share, 'map/maze.yaml')
+    
     default_urdf_model_path = os.path.join(pkg_share, 'resource/robot.urdf')
     nav2_launch_file_dir = os.path.join(
         get_package_share_directory('nav2_bringup'), 'launch')
-    param_dir = os.path.join(pkg_share, 'config/nav2_teb_params.yaml')
+    #param_dir = os.path.join(pkg_share, 'config/nav2_teb_params.yaml')
+    param_dir = os.path.join(pkg_share, 'config/nav2_dwb_params.yaml')
     control_dir = os.path.join(pkg_share, 'config/ros2_control.yml')
     urdf_model = LaunchConfiguration('urdf_model')
     rviz_config_file = LaunchConfiguration('rviz_config_file')
@@ -107,6 +111,17 @@ def generate_launch_description():
         condition=launch.conditions.IfCondition(use_nav)
     )
 
+
+    #start_lifecycle_manager_cmd = launch_ros.actions.Node(
+    #        package='nav2_lifecycle_manager',
+    #        executable='lifecycle_manager',
+    #        name='lifecycle_manager',
+    #        output='screen',
+    #        emulate_tty=True,  # https://github.com/ros2/launch/issues/188
+    #        parameters=[{'use_sim_time': use_sim_time},
+    #                    {'autostart': autostart},
+    #                    {'node_names': lifecycle_nodes}])
+#
     return LaunchDescription([
         DeclareLaunchArgument(
             name='urdf_model',
@@ -137,6 +152,10 @@ def generate_launch_description():
             name='use_sim_time',
             default_value='True',
             description='Use simulation (Gazebo) clock if true'),
+        
+        DeclareLaunchArgument(
+            'autostart', default_value='true',
+            description='Automatically startup the nav2 stack'),
 
         # DeclareLaunchArgument(
         #     name='bt_config_file',

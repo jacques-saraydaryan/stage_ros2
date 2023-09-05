@@ -157,7 +157,7 @@ private:
 
     // Last time that we received a velocity command
     rclcpp::Time base_last_cmd;
-    rclcpp::Duration base_watchdog_timeout{0};
+    rclcpp::Duration base_watchdog_timeout{{0}};
 
     // Current simulation time
     rclcpp::Time sim_time;
@@ -306,7 +306,10 @@ StageNode::StageNode(int argc, char** argv, bool gui, const char* fname, bool us
     rclcpp::Node::SharedPtr localn = rclcpp::Node::make_shared("_");
     if(!localn->get_parameter("base_watchdog_timeout", t))
         t = 0.2;
-    this->base_watchdog_timeout = rclcpp::Duration(t*1e9);
+    //std::chrono::nanoseconds
+    this->base_watchdog_timeout = rclcpp::Duration(0,int32_t(t*1e9));
+    //std::chrono::nanoseconds d_nano(t);
+    //this->base_watchdog_timeout = rclcpp::Duration(d_nano);
 
     if(!localn->get_parameter("is_depth_canonical", isDepthCanonical))
         isDepthCanonical = true;

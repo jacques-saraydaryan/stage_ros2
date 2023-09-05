@@ -1,0 +1,94 @@
+#window
+#(
+#  size [ 1932 2752 ] # in pixels
+#  scale 48.315  # pixels per meter
+#  center [ -28.982  27.251 ]
+#  rotate [ 0.500  90.000 ]
+#  show_data 1              # 1=on 0=off
+#)
+
+define block1 model
+(
+  size [0.500 0.500 0.500]
+  gui_nose 0
+)
+
+define block2 model
+(
+  size [0.500 1.500 0.500]
+  gui_nose 0
+)
+
+define topurg ranger
+(
+sensor(
+  range [ 0.0  5.6 ]
+  fov 180
+  samples 512
+)
+
+
+# generic model properties
+color "black"
+  size [ 0.050 0.050 0.100 ]
+)
+#https://pal-robotics.com/wp-content/uploads/2022/04/Datasheet_TIAGo.pdf
+
+define tiage position
+(
+  size [0.20 0.20 0.250]
+  origin [0.000 0.000 0.000 0.000]
+  gui_nose 1
+  drive "diff"
+  bitmap "robot.png"
+  topurg(pose [ 0.250 0.000 0.00 0.00 ])
+)
+
+
+define floorplan model
+(
+  # sombre, sensible, artistic
+  color "gray30"
+
+  # most maps will need a bounding box
+  boundary 1
+
+  gui_nose 0
+  gui_grid 0
+
+  gui_outline 0
+  gripper_return 0
+  fiducial_return 0
+  ranger_return 1.000
+)
+
+# set the resolution of the underlying raytrace model in meters
+resolution 0.02
+
+interval_sim 50  # simulation timestep in milliseconds
+threads 3
+
+window
+( 
+  size [ 600.0 700.0 ]
+  center [ 0.0 0.0 ]
+  rotate [ 0.0 0.0 ]
+  scale 60
+)
+
+# load an environment bitmap
+floorplan
+( 
+  name "maze"
+  bitmap "../map/maze.png"
+  size [ 10.0 10.0 2.0 ]
+  pose [  5.0  5.0 0.0 0.0 ]
+)
+
+# throw in a robot
+tiage( pose [ 2.0 2.0 0.0 0.0 ] name "tiago" color "blue")
+#block1( pose [ -33.000 34.00 0.000 180.000 ] color "red")
+#block1( pose [ -31.000 34.00 0.000 180.000 ] color "red")
+#block1( pose [ -32.000 34.00 0.000 180.000 ] color "red")
+#block2( pose [ -32.000 32.50 0.000 90.000 ] color "green")
+#block2( pose [ -31.000 32.50 0.000 90.000 ] color "green")
