@@ -7,38 +7,52 @@
 https://github.com/n0nzzz/stage_ros2
 
 ## Installation
-```bash
-$ mkdir -p stage_ros2_ws/src
-$ cd stage_ros2_ws/src
-$ git clone https://github.com/woawo1213/stage_ros2.git
-#$ sudo apt-get install ros-noetic-stage # for FLTK
-$ sudo apt install ros-humble-laser-filters
-$ sudo apt install ros-humble-joint-state-publisher
-$ sudo apt install ros-humble-xacro
-$ cd ..
-$ colcon build
-```
+- Stage dependencies
+    ```bash
+    $ sudo apt-get install git cmake g++ libjpeg8-dev libpng-dev libglu1-mesa-dev libltdl-dev libfltk1.1-dev
+    ```
+- Stage_Ros dependecies
+
+    ```bash
+    $ sudo apt install ros-humble-laser-filters
+    $ sudo apt install ros-humble-joint-state-publisher
+    $ sudo apt install ros-humble-xacro
+    ```
+
+- Build Stage and Stage_Ros
+
+    ```bash
+    $ mkdir -p stage_ros2_ws/src
+    $ cd stage_ros2_ws/src
+    $ git clone --branch ros2 git@github.com:tuw-robotics/Stage.git
+    $ git clone https://github.com/woawo1213/stage_ros2.git
+    $ cd..
+    $ colcon build --symlink-install --cmake-args -DOpenGL_GL_PREFERENCE=LEGACY
+    $ source install/setup.bash
+    $ colcon build
+    $ colcon build --symlink-install --packages-select stage_ros
+    ```
 
 ## Quick Start
 
-### Robot Stage
-```
-ros2 run stage_ros stageros src/stage_ros2/world/wonik_4th.world
-ros2 run stage_ros stageros src/ros_general_planner_tuto/woawo/stage_ros2/world/maze.world
-```
+### Start Stage Simulator wirh a robot
+    
+    ```
+    ros2 run stage_ros stageros src/ros_general_planner_tuto/woawo/stage_ros2/world/maze.world
+    ```
 
-- start the map_server node
-```
-ros2 run nav2_util lifecycle_bringup map_server
-```
+### Start robot Navigation
+- Launch  stage_ros
 
-### Robot Navigation
-Launch 
+    ```
+    ros2 launch stage_ros robot_launch.py nav:=true
+    ```
+- Start the map_server node
+    ```
+    ros2 run nav2_util lifecycle_bringup map_server
+    ```
 
-```
-# Navigation
-ros2 launch stage_ros robot_launch.py nav:=true
-```
+
 2D Pose Estimate, 2D Goal Pose
 
 <img src="doc/nav.png" width="1000" height="500">
