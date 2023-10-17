@@ -34,6 +34,7 @@
 #include <signal.h>
 
 
+
 // libstage
 #include <stage.hh>
 
@@ -158,6 +159,7 @@ private:
     // Last time that we received a velocity command
     rclcpp::Time base_last_cmd;
     rclcpp::Duration base_watchdog_timeout{{0}};
+    //JSA rclcpp::Duration base_min_time=rclcpp::Duration(0,int32_t(t*1e9) ;
 
     // Current simulation time
     rclcpp::Time sim_time;
@@ -770,11 +772,12 @@ StageNode::WorldCallback()
 
         }
     }
-
+    
     this->base_last_globalpos_time = this->sim_time;
     rosgraph_msgs::msg::Clock clock_msg;
     clock_msg.clock = sim_time;
     this->clock_pub_->publish(clock_msg);
+    usleep(20000);
 }
 
 int 
@@ -786,7 +789,8 @@ main(int argc, char** argv)
         exit(-1);
     }
 
-    rclcpp::init(argc, argv);
+    //rclcpp::init(argc, argv);
+    std::vector<std::string> args_without_ros_args = rclcpp::init_and_remove_ros_arguments(argc, argv);
 
     bool gui = true;
     bool use_model_names = false;
@@ -797,8 +801,10 @@ main(int argc, char** argv)
         if(!strcmp(argv[i], "-u"))
             use_model_names = true;
     }
+    std::string world_file =  args_without_ros_args[args_without_ros_args.size()-1];
 
-    StageNode sn(argc-1,argv,gui,argv[argc-1], use_model_names);
+    //StageNode sn(argc-1,argv,gui,argv[argc-1], use_model_names);
+    StageNode sn(argc-1,argv,gui,world_file.c_str(), use_model_names);
 
     if(sn.SubscribeModels() != 0)
         exit(-1);
